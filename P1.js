@@ -84,18 +84,30 @@ torsoGeometry.applyMatrix(non_uniform_scale);
 
 //tail
 var tailGeometry = makeCube();
-var tail_scale = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,7,0, 0,0,0,1);
+var tail_scale = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,6,0, 0,0,0,1);
 tailGeometry.applyMatrix(tail_scale);
 
 //head
 var headGeometry = makeCube();
-var head_scale = new THREE.Matrix4().set(2,0,0,0, 0,2,0,0, 0,0,2.5,0, 0,0,0,1);
+var head_scale = new THREE.Matrix4().set(3,0,0,0, 0,3,0,0, 0,0,3.5,0, 0,0,0,1);
 headGeometry.applyMatrix(head_scale);
 
 //nose
 var noseGeometry = makeCube();
-var nose_scale = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+var nose_scale = new THREE.Matrix4().set(3,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
 noseGeometry.applyMatrix(nose_scale);
+
+//paw
+
+var pawGeometry = makeCube();
+var paw_scale = new THREE.Matrix4().set(3,0,0,0, 0,0.75,0,0, 0,0,4,0, 0,0,0,1);
+pawGeometry.applyMatrix(paw_scale);
+
+//claw
+var clawGeometry = makeCube();
+var claw_scale = new THREE.Matrix4().set(0.5,0,0,0, 0,0.5,0,0, 0,0,1,0, 0,0,0,1);
+clawGeometry.applyMatrix(claw_scale);
+
 
 // MATRICES
 var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
@@ -104,9 +116,18 @@ var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
 // Note: Use of parent attribute is not allowed.
 // Hint: Keep hierarchies in mind!   
        
-var tailMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,-7, 0,0,0,1);
+var tailMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,-4, 0,0,0,1);
 var headMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,4.5, 0,0,0,1);
-var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,1.5, 0,0,0,1);
+var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,2, 0,0,0,1);
+var front_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
+var front_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
+var back_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
+var back_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
+var front_right_claw_1Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
+var front_right_claw_2Matrix = new THREE.Matrix4().set(1,0,0,0.75, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
+var front_right_claw_3Matrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
+var front_right_claw_4Matrix = new THREE.Matrix4().set(1,0,0,-0.75, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
+var front_right_claw_5Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
 // CREATE BODY
 var torso = new THREE.Mesh(torsoGeometry,normalMaterial);
 torso.setMatrix(torsoMatrix);
@@ -120,12 +141,39 @@ torso.setMatrix(torsoMatrix);
 var tail = new THREE.Mesh(tailGeometry,normalMaterial);
 	var head = new THREE.Mesh(headGeometry,normalMaterial);
 	var nose = new THREE.Mesh(noseGeometry,normalMaterial);
+	var front_right_paw = new THREE.Mesh(pawGeometry, normalMaterial);
+	var front_left_paw = new THREE.Mesh(pawGeometry, normalMaterial);
+	var back_right_paw = new THREE.Mesh(pawGeometry, normalMaterial);
+	var back_left_paw = new THREE.Mesh(pawGeometry, normalMaterial);
+	var front_right_claw_1 = new THREE.Mesh(clawGeometry, normalMaterial);
+	var front_right_claw_2 = new THREE.Mesh(clawGeometry, normalMaterial);
+	var front_right_claw_3 = new THREE.Mesh(clawGeometry, normalMaterial);
+	var front_right_claw_4 = new THREE.Mesh(clawGeometry, normalMaterial);
+	var front_right_claw_5 = new THREE.Mesh(clawGeometry, normalMaterial);
 	head.setMatrix(headMatrix);
 	tail.setMatrix(tailMatrix);
 	nose.setMatrix(noseMatrix);
+	front_right_paw.setMatrix(front_right_pawMatrix);
+	front_left_paw.setMatrix(front_left_pawMatrix);
+	back_right_paw.setMatrix(back_right_pawMatrix);
+	back_left_paw.setMatrix(back_left_pawMatrix);
+	front_right_claw_1.setMatrix(front_right_claw_1Matrix);
+	front_right_claw_2.setMatrix(front_right_claw_2Matrix);
+	front_right_claw_3.setMatrix(front_right_claw_3Matrix);
+	front_right_claw_4.setMatrix(front_right_claw_4Matrix);
+	front_right_claw_5.setMatrix(front_right_claw_5Matrix);
 	torso.add(tail);
 	head.add(nose);
 	torso.add(head);
+	front_right_paw.add(front_right_claw_1);
+	front_right_paw.add(front_right_claw_2);
+	front_right_paw.add(front_right_claw_3);
+	front_right_paw.add(front_right_claw_4);
+	front_right_paw.add(front_right_claw_5);
+	torso.add(front_right_paw);
+	torso.add(front_left_paw);
+	torso.add(back_right_paw);
+	torso.add(back_left_paw);
 	scene.add(torso);
 
 
@@ -160,21 +208,22 @@ function init_animation(p_start,p_end,t_length){
   return;
 }
 
-
-
 function updateBody() {
   switch(true)
   {
-      case(key == "U" && animate):
+      case(key == "U" || key =="E" && animate):
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
 	
 	      if (time > time_end){
 	        p = p1;
 	        animate = false;
-	        break;e
+	        break;
 	      }
 	
 	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	      
+	      if(key == "E")
+	    	  p = -p;
 	
 	      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
 	                                            0, Math.cos(-p),-Math.sin(-p), 0, 
@@ -190,29 +239,8 @@ function updateBody() {
       // TO-DO: IMPLEMENT JUMPCUT/ANIMATION FOR EACH KEY!
       // Note: Remember spacebar sets jumpcut/animate!
       
-      case(key == "E" && animate):
-    	  
-    	  var time = clock.getElapsedTime(); // t seconds passed since the clock started.
-
-	      if (time > time_end){
-	        p = p1;
-	        animate = false;
-	        break;
-	      }
-	
-	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
-	
-	      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
-	                                            0, Math.cos(p),-Math.sin(p), 0, 
-	                                            0, Math.sin(p), Math.cos(p), 0,
-	                                            0,        0,         0,        1);
-	
-	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotateZ);
-	      torso.setMatrix(torsoRotMatrix); 
       
-      break
-      
-      case(key == "H" && animate):
+      case(key == "H"|| key == "G" && animate):
     	 
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
 	
@@ -221,21 +249,26 @@ function updateBody() {
 	    	  animate = false;
 	    	  break;
 	      }
-	
+	      
+	      	
 	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
 	      
-	      var rotateX = new THREE.Matrix4().set(Math.cos(-p),        0,   Math.sin(-p),        0, 
-	    		  										  0,        1,	    	   0,        0, 
-	    		  							   -Math.sin(-p), 		0,   Math.cos(-p),        0,
-	    		  										  0,        0,             0,        1);
-
+	      if(key == "H")
+	    	  p = -p;
+	      
+	      var rotateX = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
+					  							     	  0,        1,	    	   0,        0, 
+					  						   -Math.sin(p), 		0,   Math.cos(p),        0,
+		   												  0,        0,             0,        1);
+	      	
 		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotateX);
 		  head.setMatrix(headRotMatrix); 
 
     	  
       break
+            
       
-      case(key == "G" && animate):
+      case(key == "T" || key == "V" && animate):
      	 
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
 	
@@ -247,17 +280,20 @@ function updateBody() {
 	
 	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
 	      
-	      var rotateX1 = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
+	      if(key == "V")
+	    	  p = -p;
+	      
+	      var rotateX = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
 	    		  										  0,        1,	    	   0,        0, 
 	    		  							   -Math.sin(p), 		0,   Math.cos(p),        0,
 	    		  										  0,        0,             0,        1);
 
-		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotateX1);
-		  head.setMatrix(headRotMatrix); 
+		  var tailRotMatrix = new THREE.Matrix4().multiplyMatrices(tailMatrix,rotateX);
+		  tail.setMatrix(tailRotMatrix); 
 
     	  
       break
-
+      
     default:
       break;
   }
@@ -285,6 +321,10 @@ keyboard.domElement.addEventListener('keydown',function(event){
 	    (key == "H")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "H")}
   else if(keyboard.eventMatches(event,"G")){ 
 	    (key == "G")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "G")}
+  else if(keyboard.eventMatches(event,"T")){ 
+	    (key == "T")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "T")}
+  else if(keyboard.eventMatches(event,"V")){ 
+	    (key == "V")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "V")}
 
   // TO-DO: BIND KEYS TO YOUR JUMP CUTS AND ANIMATIONS
   // Note: Remember spacebar sets jumpcut/animate! 
