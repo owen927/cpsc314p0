@@ -70,6 +70,7 @@ function makeCube() {
 }
 
 // GEOMETRY
+//torso
 var torsoGeometry = makeCube();
 var non_uniform_scale = new THREE.Matrix4().set(5,0,0,0, 0,5,0,0, 0,0,8,0, 0,0,0,1);
 torsoGeometry.applyMatrix(non_uniform_scale);
@@ -81,7 +82,20 @@ torsoGeometry.applyMatrix(non_uniform_scale);
 // Note: The torso has been done for you (but feel free to modify it!)  
 // Hint: Explicity declare new matrices using Matrix4().set     
 
+//tail
+var tailGeometry = makeCube();
+var tail_scale = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,7,0, 0,0,0,1);
+tailGeometry.applyMatrix(tail_scale);
 
+//head
+var headGeometry = makeCube();
+var head_scale = new THREE.Matrix4().set(2,0,0,0, 0,2,0,0, 0,0,2.5,0, 0,0,0,1);
+headGeometry.applyMatrix(head_scale);
+
+//nose
+var noseGeometry = makeCube();
+var nose_scale = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1);
+noseGeometry.applyMatrix(nose_scale);
 
 // MATRICES
 var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
@@ -89,18 +103,31 @@ var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
 // TO-DO: INITIALIZE THE REST OF YOUR MATRICES 
 // Note: Use of parent attribute is not allowed.
 // Hint: Keep hierarchies in mind!   
-// Hint: Play around with the headTorsoMatrix values, what changes in the render? Why?         
-
-
-
+       
+var tailMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,-7, 0,0,0,1);
+var headMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,4.5, 0,0,0,1);
+var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,1.5, 0,0,0,1);
 // CREATE BODY
 var torso = new THREE.Mesh(torsoGeometry,normalMaterial);
-torso.setMatrix(torsoMatrix)
-scene.add(torso);
+torso.setMatrix(torsoMatrix);
+
 
 // TO-DO: PUT TOGETHER THE REST OF YOUR STAR-NOSED MOLE AND ADD TO THE SCENE!
 // Hint: Hint: Add one piece of geometry at a time, then implement the motion for that part. 
 //             Then you can make sure your hierarchy still works properly after each step.
+
+
+var tail = new THREE.Mesh(tailGeometry,normalMaterial);
+	var head = new THREE.Mesh(headGeometry,normalMaterial);
+	var nose = new THREE.Mesh(noseGeometry,normalMaterial);
+	head.setMatrix(headMatrix);
+	tail.setMatrix(tailMatrix);
+	nose.setMatrix(noseMatrix);
+	torso.add(tail);
+	head.add(nose);
+	torso.add(head);
+	scene.add(torso);
+
 
 
 
@@ -121,7 +148,7 @@ var p; // current frame
 var animate = false; // animate?
 
 // function init_animation()
-// Initializes parameters and sets animate flag to true.
+// Initializes parametgers and sets animate flag to true.
 // Input: start position or angle, end position or angle, and total time of animation.
 function init_animation(p_start,p_end,t_length){
   p0 = p_start;
@@ -133,33 +160,103 @@ function init_animation(p_start,p_end,t_length){
   return;
 }
 
+
+
 function updateBody() {
   switch(true)
   {
       case(key == "U" && animate):
-      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	
+	      if (time > time_end){
+	        p = p1;
+	        animate = false;
+	        break;e
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	
+	      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
+	                                            0, Math.cos(-p),-Math.sin(-p), 0, 
+	                                            0, Math.sin(-p), Math.cos(-p), 0,
+	                                            0,        0,         0,        1);
+	
+	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotateZ);
+	            torso.setMatrix(torsoRotMatrix); 
+      
 
-      if (time > time_end){
-        p = p1;
-        animate = false;
-        break;
-      }
-
-      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
-
-      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
-                                            0, Math.cos(-p),-Math.sin(-p), 0, 
-                                            0, Math.sin(-p), Math.cos(-p), 0,
-                                            0,        0,         0,        1);
-
-      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotateZ);
-      torso.setMatrix(torsoRotMatrix); 
       break
 
       // TO-DO: IMPLEMENT JUMPCUT/ANIMATION FOR EACH KEY!
       // Note: Remember spacebar sets jumpcut/animate!
       
+      case(key == "E" && animate):
+    	  
+    	  var time = clock.getElapsedTime(); // t seconds passed since the clock started.
 
+	      if (time > time_end){
+	        p = p1;
+	        animate = false;
+	        break;
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	
+	      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
+	                                            0, Math.cos(p),-Math.sin(p), 0, 
+	                                            0, Math.sin(p), Math.cos(p), 0,
+	                                            0,        0,         0,        1);
+	
+	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotateZ);
+	      torso.setMatrix(torsoRotMatrix); 
+      
+      break
+      
+      case(key == "H" && animate):
+    	 
+	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	
+	      if (time > time_end){
+	    	  p = p1;
+	    	  animate = false;
+	    	  break;
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	      
+	      var rotateX = new THREE.Matrix4().set(Math.cos(-p),        0,   Math.sin(-p),        0, 
+	    		  										  0,        1,	    	   0,        0, 
+	    		  							   -Math.sin(-p), 		0,   Math.cos(-p),        0,
+	    		  										  0,        0,             0,        1);
+
+		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotateX);
+		  head.setMatrix(headRotMatrix); 
+
+    	  
+      break
+      
+      case(key == "G" && animate):
+     	 
+	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	
+	      if (time > time_end){
+	    	  p = p1;
+	    	  animate = false;
+	    	  break;
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	      
+	      var rotateX1 = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
+	    		  										  0,        1,	    	   0,        0, 
+	    		  							   -Math.sin(p), 		0,   Math.cos(p),        0,
+	    		  										  0,        0,             0,        1);
+
+		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotateX1);
+		  head.setMatrix(headRotMatrix); 
+
+    	  
+      break
 
     default:
       break;
@@ -167,7 +264,7 @@ function updateBody() {
 }
 
 // LISTEN TO KEYBOARD
-// Hint: Pay careful attention to how the keys already specified work!
+// Hint: Pay careful attention to how the  keys already specified work!
 var keyboard = new THREEx.KeyboardState();
 var grid_state = false;
 var key;
@@ -182,7 +279,12 @@ keyboard.domElement.addEventListener('keydown',function(event){
     camera.lookAt(scene.position);}
   else if(keyboard.eventMatches(event,"U")){ 
     (key == "U")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "U")}  
-
+  else if(keyboard.eventMatches(event,"E")){ 
+	    (key == "E")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "E")}  
+  else if(keyboard.eventMatches(event,"H")){ 
+	    (key == "H")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "H")}
+  else if(keyboard.eventMatches(event,"G")){ 
+	    (key == "G")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "G")}
 
   // TO-DO: BIND KEYS TO YOUR JUMP CUTS AND ANIMATIONS
   // Note: Remember spacebar sets jumpcut/animate! 
