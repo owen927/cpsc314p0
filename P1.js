@@ -109,9 +109,9 @@ var claw_scale = new THREE.Matrix4().set(0.5,0,0,0, 0,0.5,0,0, 0,0,1,0, 0,0,0,1)
 clawGeometry.applyMatrix(claw_scale);
 
 //nose tentacles
-var tentaclesGeometry = makecube();
-var tentacle_scale = new THREE.Matrix().set(0.3,0,0,0, 0,0.3,0,0, 0,0,1.5,0, 0,0,0,1);
-tentacleGeometry.applyMatrix(tentacle_scale);
+//var tentaclesGeometry = makecube();
+//var tentacle_scale = new THREE.Matrix4().set(0.3,0,0,0, 0,0.3,0,0, 0,0,1.5,0, 0,0,0,1);
+//tentaclesGeometry.applyMatrix(tentacle_scale);
 
 // MATRICES
 var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
@@ -123,10 +123,20 @@ var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
 var tailMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,-4, 0,0,0,1);
 var headMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,4.5, 0,0,0,1);
 var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,2, 0,0,0,1);
+
+var paw_tilt =  new THREE.Matrix4().set(1,        0,         0,        0, 
+										0, Math.cos(220.4),-Math.sin(220.4), 0, 
+										0, Math.sin(220.4), Math.cos(220.4), 0,
+										0,        0,         0,        1);
 var front_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
+front_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,paw_tilt);
 var front_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
+front_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,paw_tilt);
 var back_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
+back_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_right_pawMatrix,paw_tilt);
 var back_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
+back_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_left_pawMatrix,paw_tilt);
+
 var claw_1Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
 var claw_2Matrix = new THREE.Matrix4().set(1,0,0,0.75, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
 var claw_3Matrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
@@ -261,6 +271,7 @@ function init_animation(p_start,p_end,t_length){
 function updateBody() {
   switch(true)
   {
+  	  //body left/right
       case(key == "U" || key =="E" && animate):
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
 	
@@ -289,7 +300,7 @@ function updateBody() {
       // TO-DO: IMPLEMENT JUMPCUT/ANIMATION FOR EACH KEY!
       // Note: Remember spacebar sets jumpcut/animate!
       
-      
+      //head left/right
       case(key == "H"|| key == "G" && animate):
     	 
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
@@ -317,7 +328,7 @@ function updateBody() {
     	  
       break
             
-      
+      //tail left/right
       case(key == "T" || key == "V" && animate):
      	 
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
@@ -342,6 +353,53 @@ function updateBody() {
 		  tail.setMatrix(tailRotMatrix); 
 
     	  
+      break
+      
+      //dig
+      case(key == "D" && animate):
+      	 
+	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	
+	      if (time > time_end){
+	    	  p = p1;
+	    	  animate = false;
+	    	  break;
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	      
+	  
+	      var rotateX = new THREE.Matrix4().set(1,        0,         0,        0, 
+	    		  								 0, Math.cos(p),-Math.sin(p), 0, 
+	    		  								 0, Math.sin(p), Math.cos(p), 0,
+	    		  								 0,        0,         0,        1);
+	      
+		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,rotateX);
+		  front_right_paw.setMatrix(pawRotMatrix); 
+		  
+		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,rotateX);
+		  front_left_paw.setMatrix(pawRotMatrix);
+		  
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_1Matrix,rotateX);
+		  front_right_claw_1.setMatrix(clawRotMatrix);
+		  front_left_claw_1.setMatrix(clawRotMatrix);
+		  
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_2Matrix,rotateX);
+		  front_right_claw_2.setMatrix(clawRotMatrix);
+		  front_left_claw_2.setMatrix(clawRotMatrix);
+		  
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_3Matrix,rotateX);
+		  front_right_claw_3.setMatrix(clawRotMatrix);
+		  front_left_claw_3.setMatrix(clawRotMatrix);
+		  
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_4Matrix,rotateX);
+		  front_right_claw_4.setMatrix(clawRotMatrix);
+		  front_left_claw_4.setMatrix(clawRotMatrix);
+		  
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_5Matrix,rotateX);
+		  front_right_claw_5.setMatrix(clawRotMatrix);
+		  front_left_claw_5.setMatrix(clawRotMatrix);
+		  
       break
       
     default:
@@ -375,6 +433,8 @@ keyboard.domElement.addEventListener('keydown',function(event){
 	    (key == "T")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "T")}
   else if(keyboard.eventMatches(event,"V")){ 
 	    (key == "V")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "V")}
+  else if(keyboard.eventMatches(event,"D")){ 
+	    (key == "D")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "D")}
 
   // TO-DO: BIND KEYS TO YOUR JUMP CUTS AND ANIMATIONS
   // Note: Remember spacebar sets jumpcut/animate! 
