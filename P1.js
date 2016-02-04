@@ -69,6 +69,31 @@ function makeCube() {
   return unitCube;
 }
 
+//Up down
+function rotate_Z(p)
+{
+	var rotateX =  new THREE.Matrix4().set(1,           0,           0,        0, 
+										   0, Math.cos(p),-Math.sin(p),		   0, 
+										   0, Math.sin(p), Math.cos(p), 	   0,
+										   0,           0,           0,        1);
+	return rotateX;
+}
+
+//left right
+function rotate_X(p)
+{
+	var rotateY = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
+	     	  										0,        1,             0,        0, 
+	     	  							 -Math.sin(p), 	      0,   Math.cos(p),        0,
+	     	  										0,        0,             0,        1);
+	
+	return rotateY;
+	
+}
+
+var torsoRotMatrix = new THREE.Matrix4();
+
+
 // GEOMETRY
 //torso
 var torsoGeometry = makeCube();
@@ -132,28 +157,6 @@ var headMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,4.5, 0,0,0,1);
 
 //nose
 var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,2, 0,0,0,1);
-
-//Up down
-function rotate_Z(p)
-{
-	var rotateX =  new THREE.Matrix4().set(1,           0,           0,        0, 
-										   0, Math.cos(p),-Math.sin(p),		   0, 
-										   0, Math.sin(p), Math.cos(p), 	   0,
-										   0,           0,           0,        1);
-	return rotateX;
-}
-
-//left right
-function rotate_X(p)
-{
-	var rotateY = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
-	     	  										0,        1,             0,        0, 
-	     	  							 -Math.sin(p), 	      0,   Math.cos(p),        0,
-	     	  										0,        0,             0,        1);
-	
-	return rotateY;
-	
-}
 
 //paw
 var front_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
@@ -465,19 +468,25 @@ function updateBody() {
   	  //body left/right
       case(key == "U" || key =="E" && animate):
 	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
-	
-	      if (time > time_end){
-	        p = p1;
-	        animate = false;
-	        break;
-	      }
-	
-	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
-	      
-	      if(key == "U")
-	    	  p = -p;
-	
-	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotate_Z(p));
+      
+//      	  if(jump_cut == false)
+//      	` {  
+			      if (time > time_end){
+			        p = p1;
+			        animate = false;
+			        break;
+			      }
+			
+			      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+			      
+			      if(key == "U")
+			    	  p = -p;
+//      	  }
+//      	  else
+//      	  {
+//      		 p = p1;
+//      	  }
+	      torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotate_Z(p));
 	            torso.setMatrix(torsoRotMatrix); 
       
 
@@ -509,7 +518,7 @@ function updateBody() {
 
     	  
       break
-            h
+            
       //tail left/right
       case(key == "T" || key == "V" && animate):
      	 
@@ -574,6 +583,95 @@ function updateBody() {
 		  
       break
       
+      case(key == "N" && animate):
+       	 
+	      var time = clock.getElapsedTime(); // t seconds passed since the clock started.
+	
+	      if (time > time_end){
+	    	  p = p1;
+	    	  animate = false;
+	    	  break;
+	      }
+	
+	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
+	      
+	      var sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_1Matrix,rotate_X(p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+	      tentacle_1.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_2Matrix,rotate_X(p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+		  tentacle_2.setMatrix(sidetentacleRotMatrix);
+		  
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_3Matrix,rotate_X(p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+	      tentacle_3.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_4Matrix,rotate_X(p));
+	      tentacle_4.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_5Matrix,rotate_X(p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(p));
+	 	  tentacle_5.setMatrix(sidetentacleRotMatrix);
+	 	  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_6Matrix,rotate_Z(-p));
+		  tentacle_6.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_7Matrix,rotate_Z(p));
+		  tentacle_7.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_8Matrix,rotate_Z(p));
+		  tentacle_8.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_9Matrix,rotate_Z(-p));
+		  tentacle_9.setMatrix(sidetentacleRotMatrix);
+		  
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_10Matrix,rotate_X(-p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+	      tentacle_10.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_11Matrix,rotate_X(-p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+		  tentacle_11.setMatrix(sidetentacleRotMatrix);
+		  
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_12Matrix,rotate_X(-p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(-p));
+	      tentacle_12.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_13Matrix,rotate_X(-p));
+	      tentacle_13.setMatrix(sidetentacleRotMatrix);
+	      
+	      sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(tentacle_14Matrix,rotate_X(-p));
+	      //sidetentacleRotMatrix =  new THREE.Matrix4().multiplyMatrices(sidetentacleRotMatrix,rotate_Z(p));
+	 	  tentacle_14.setMatrix(sidetentacleRotMatrix);
+	 	  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_15Matrix,rotate_Z(-p));
+		  tentacle_15.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_16Matrix,rotate_Z(p));
+		  tentacle_16.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_17Matrix,rotate_Z(p));
+		  tentacle_17.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_18Matrix,rotate_Z(-p));
+		  tentacle_18.setMatrix(sidetentacleRotMatrix);
+		  
+		  //small
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_19Matrix,rotate_Z(-p));
+		  tentacle_19.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_20Matrix,rotate_Z(p));
+		  tentacle_20.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_21Matrix,rotate_Z(-p));
+		  tentacle_21.setMatrix(sidetentacleRotMatrix);
+		  
+	 	  sidetentacleRotMatrix = new THREE.Matrix4().multiplyMatrices(tentacle_22Matrix,rotate_Z(p));
+		  tentacle_22.setMatrix(sidetentacleRotMatrix);
+	  break
+      
     default:
       break;
   }
@@ -584,6 +682,7 @@ function updateBody() {
 var keyboard = new THREEx.KeyboardState();
 var grid_state = false;
 var key;
+var jump_cut = false;
 keyboard.domElement.addEventListener('keydown',function(event){
   if (event.repeat)
     return;
@@ -593,6 +692,15 @@ keyboard.domElement.addEventListener('keydown',function(event){
   else if(keyboard.eventMatches(event,"0")){    // 0: Set camera to neutral position, view reset
     camera.position.set(45,0,0);
     camera.lookAt(scene.position);}
+  else if(keyboard.eventMatches(event," ")){ 
+  	if(jump_cut == false)
+  	{
+  		jump_cut = true;	
+  	}
+  	else
+  	{
+  		jump_cut = false
+  	}	}
   else if(keyboard.eventMatches(event,"U")){ 
     (key == "U")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "U")}  
   else if(keyboard.eventMatches(event,"E")){ 
@@ -607,6 +715,8 @@ keyboard.domElement.addEventListener('keydown',function(event){
 	    (key == "V")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "V")}
   else if(keyboard.eventMatches(event,"D")){ 
 	    (key == "D")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "D")}
+  else if(keyboard.eventMatches(event,"N")){ 
+	    (key == "N")? init_animation(p1,p0,time_length) : (init_animation(0,Math.PI/4,1), key = "N")}
 
   // TO-DO: BIND KEYS TO YOUR JUMP CUTS AND ANIMATIONS
   // Note: Remember spacebar sets jumpcut/animate! 
