@@ -113,6 +113,9 @@ var tentaclesGeometry = makeCube();
 var tentacle_scale = new THREE.Matrix4().set(0.3,0,0,0, 0,0.3,0,0, 0,0,1.5,0, 0,0,0,1);
 tentaclesGeometry.applyMatrix(tentacle_scale);
 
+var smalltentaclesGeometry = makeCube();
+var tentacle_scale_small = new THREE.Matrix4().set(0.2,0,0,0, 0,0.2,0,0, 0,0,1.2,0, 0,0,0,1);
+smalltentaclesGeometry.applyMatrix(tentacle_scale_small);
 
 // MATRICES
 var torsoMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,2.5, 0,0,1,0, 0,0,0,1);
@@ -131,7 +134,7 @@ var headMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,4.5, 0,0,0,1);
 var noseMatrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,2, 0,0,0,1);
 
 //Up down
-function rotate_1(p)
+function rotate_Z(p)
 {
 	var rotateX =  new THREE.Matrix4().set(1,           0,           0,        0, 
 										   0, Math.cos(p),-Math.sin(p),		   0, 
@@ -141,7 +144,7 @@ function rotate_1(p)
 }
 
 //left right
-function rotate_2(p)
+function rotate_X(p)
 {
 	var rotateY = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
 	     	  										0,        1,             0,        0, 
@@ -154,16 +157,16 @@ function rotate_2(p)
 
 //paw
 var front_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
-front_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,rotate_1(220.4));
+front_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,rotate_Z(220.4));
 
 var front_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,3, 0,0,0,1);
-front_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,rotate_1(220.4));
+front_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,rotate_Z(220.4));
 
 var back_right_pawMatrix = new THREE.Matrix4().set(1,0,0,-2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
-back_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_right_pawMatrix,rotate_1(220.4));
+back_right_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_right_pawMatrix,rotate_Z(220.4));
 
 var back_left_pawMatrix = new THREE.Matrix4().set(1,0,0,2, 0,1,0,-3, 0,0,1,-3, 0,0,0,1);
-back_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_left_pawMatrix,rotate_1(220.4));
+back_left_pawMatrix = new THREE.Matrix4().multiplyMatrices(back_left_pawMatrix,rotate_Z(220.4));
 
 //claw
 var claw_1Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
@@ -172,31 +175,85 @@ var claw_3Matrix = new THREE.Matrix4().set(1,0,0,0, 0,1,0,0,  0,0,1,2.5, 0,0,0,1
 var claw_4Matrix = new THREE.Matrix4().set(1,0,0,-0.75, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
 var claw_5Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,0,  0,0,1,2.5, 0,0,0,1);
 
-//nose tentacle right
-
-
+//nose tentacle big ones
+//left
 var tentacle_1Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,0.5,  0,0,1,1, 0,0,0,1);
-tentacle_1Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_1Matrix, rotate_1(219.8));
-tentacle_1Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_1Matrix,rotate_2(-24.8));
+tentacle_1Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_1Matrix, rotate_Z(219.8));
+tentacle_1Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_1Matrix,rotate_X(-24.8));
 
 var tentacle_2Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,0.2,  0,0,1,1, 0,0,0,1);
-tentacle_2Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_2Matrix,rotate_2(-24.8));
+tentacle_2Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_2Matrix,rotate_X(-24.8));
 
-var tentacle_3Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.15,  0,0,1,1, 0,0,0,1);
-//tentacle_3Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_3Matrix, rotate_1(220.3));
-tentacle_3Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_3Matrix,rotate_2(-24.8));
+var tentacle_3Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.1,  0,0,1,1, 0,0,0,1);
+tentacle_3Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_3Matrix, rotate_Z(220.1));
+tentacle_3Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_3Matrix,rotate_X(-24.75));
 
-var tentacle_4Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.5,  0,0,1,1, 0,0,0,1);
-tentacle_4Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_4Matrix,rotate_1(220.1));
-tentacle_4Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_4Matrix,rotate_2(-24.8));
+var tentacle_4Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.4,  0,0,1,1, 0,0,0,1);
+tentacle_4Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_4Matrix,rotate_Z(220.15));
+tentacle_4Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_4Matrix,rotate_X(-24.8));
 
-var tentacle_5Matrix = new THREE.Matrix4().set(1,0,0,1.2, 0,1,0,0.6,  0,0,1,1, 0,0,0,1);
-tentacle_5Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_5Matrix,rotate_1(210.1));
+var tentacle_5Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_5Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_5Matrix,rotate_Z(220.3));
+tentacle_5Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_5Matrix,rotate_X(-24.8));
 
-var tentacle_6Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-10.4,  0,0,1,1, 0,0,0,1);
-//var tentacle_7Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.4,  0,0,1,1, 0,0,0,1);
-//var tentacle_8Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.4,  0,0,1,1, 0,0,0,1);
-//var tentacle_9Matrix = new THREE.Matrix4().set(1,0,0,1.5, 0,1,0,-0.4,  0,0,1,1, 0,0,0,1);
+var tentacle_6Matrix = new THREE.Matrix4().set(1,0,0,1.2, 0,1,0,0.6,  0,0,1,1, 0,0,0,1);
+tentacle_6Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_6Matrix,rotate_Z(15.3));
+
+var tentacle_7Matrix = new THREE.Matrix4().set(1,0,0,1.2, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_7Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_7Matrix,rotate_Z(220.3));
+
+var tentacle_8Matrix = new THREE.Matrix4().set(1,0,0,0.85, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_8Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_8Matrix,rotate_Z(220.3));
+
+var tentacle_9Matrix = new THREE.Matrix4().set(1,0,0,0.85, 0,1,0,0.6,  0,0,1,1, 0,0,0,1);
+tentacle_9Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_9Matrix,rotate_Z(210.1));
+
+//right
+var tentacle_10Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,0.5,  0,0,1,1, 0,0,0,1);
+tentacle_10Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_10Matrix, rotate_Z(219.8));
+tentacle_10Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_10Matrix,rotate_X(24.8));
+
+var tentacle_11Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,0.2,  0,0,1,1, 0,0,0,1);
+tentacle_11Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_11Matrix,rotate_X(24.8));
+
+var tentacle_12Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,-0.1,  0,0,1,1, 0,0,0,1);
+tentacle_12Matrx = new THREE.Matrix4().multiplyMatrices(tentacle_12Matrix, rotate_Z(230.1));
+tentacle_12Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_12Matrix,rotate_X(24.75));
+
+var tentacle_13Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,-0.4,  0,0,1,1, 0,0,0,1);
+tentacle_13Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_13Matrix,rotate_Z(220.15));
+tentacle_13Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_13Matrix,rotate_X(24.8));
+
+var tentacle_14Matrix = new THREE.Matrix4().set(1,0,0,-1.5, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_14Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_14Matrix,rotate_Z(220.3));
+tentacle_14Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_14Matrix,rotate_X(24.8));
+
+var tentacle_15Matrix = new THREE.Matrix4().set(1,0,0,-1.2, 0,1,0,0.6,  0,0,1,1, 0,0,0,1);
+tentacle_15Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_15Matrix,rotate_Z(15.3));
+
+var tentacle_16Matrix = new THREE.Matrix4().set(1,0,0,-1.2, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_16Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_16Matrix,rotate_Z(220.3));
+
+var tentacle_17Matrix = new THREE.Matrix4().set(1,0,0,-0.85, 0,1,0,-0.6,  0,0,1,1, 0,0,0,1);
+tentacle_17Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_17Matrix,rotate_Z(220.3));
+
+var tentacle_18Matrix = new THREE.Matrix4().set(1,0,0,-0.85, 0,1,0,0.6,  0,0,1,1, 0,0,0,1);
+tentacle_18Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_18Matrix,rotate_Z(210.1));
+
+//small ones
+
+var tentacle_19Matrix = new THREE.Matrix4().set(1,0,0,0.6, 0,1,0,0.2,  0,0,1,1, 0,0,0,1);
+//tentacle_19Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_19Matrix,rotate_Z(210.1));
+
+var tentacle_20Matrix = new THREE.Matrix4().set(1,0,0,0.6, 0,1,0,-0.2,  0,0,1,1, 0,0,0,1);
+//tentacle_20Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_20Matrix,rotate_Z(220.3));
+
+var tentacle_21Matrix = new THREE.Matrix4().set(1,0,0,-0.6, 0,1,0,0.2,  0,0,1,1, 0,0,0,1);
+//tentacle_21Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_21Matrix,rotate_Z(220.3));
+
+var tentacle_22Matrix = new THREE.Matrix4().set(1,0,0,-0.6, 0,1,0,-0.2,  0,0,1,1, 0,0,0,1);
+//tentacle_22Matrix = new THREE.Matrix4().multiplyMatrices(tentacle_22Matrix,rotate_Z(210.1));
+
 
 // CREATE BODY
 var torso = new THREE.Mesh(torsoGeometry,normalMaterial);
@@ -273,11 +330,45 @@ var tentacle_2 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
 var tentacle_3 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
 var tentacle_4 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
 var tentacle_5 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_6 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_7 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_8 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_9 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_10 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_11 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_12 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_13 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_14 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_15 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_16 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_17 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_18 =  new THREE.Mesh(tentaclesGeometry, normalMaterial);
+var tentacle_19 =  new THREE.Mesh(smalltentaclesGeometry, normalMaterial);
+var tentacle_20 =  new THREE.Mesh(smalltentaclesGeometry, normalMaterial);
+var tentacle_21 =  new THREE.Mesh(smalltentaclesGeometry, normalMaterial);
+var tentacle_22 =  new THREE.Mesh(smalltentaclesGeometry, normalMaterial);
 tentacle_1.setMatrix(tentacle_1Matrix);
 tentacle_2.setMatrix(tentacle_2Matrix);
 tentacle_3.setMatrix(tentacle_3Matrix);
 tentacle_4.setMatrix(tentacle_4Matrix);
 tentacle_5.setMatrix(tentacle_5Matrix);
+tentacle_6.setMatrix(tentacle_6Matrix);
+tentacle_7.setMatrix(tentacle_7Matrix);
+tentacle_8.setMatrix(tentacle_8Matrix);
+tentacle_9.setMatrix(tentacle_9Matrix);
+tentacle_10.setMatrix(tentacle_10Matrix);
+tentacle_11.setMatrix(tentacle_11Matrix);
+tentacle_12.setMatrix(tentacle_12Matrix);
+tentacle_13.setMatrix(tentacle_13Matrix);
+tentacle_14.setMatrix(tentacle_14Matrix);
+tentacle_15.setMatrix(tentacle_15Matrix);
+tentacle_16.setMatrix(tentacle_16Matrix);
+tentacle_17.setMatrix(tentacle_17Matrix);
+tentacle_18.setMatrix(tentacle_18Matrix);
+tentacle_19.setMatrix(tentacle_19Matrix);
+tentacle_20.setMatrix(tentacle_20Matrix);
+tentacle_21.setMatrix(tentacle_21Matrix);
+tentacle_22.setMatrix(tentacle_22Matrix);
 
 
 torso.add(tail);
@@ -311,6 +402,23 @@ nose.add(tentacle_2);
 nose.add(tentacle_3);
 nose.add(tentacle_4);
 nose.add(tentacle_5);
+nose.add(tentacle_6);
+nose.add(tentacle_7);
+nose.add(tentacle_8);
+nose.add(tentacle_9);
+nose.add(tentacle_10);
+nose.add(tentacle_11);
+nose.add(tentacle_12);
+nose.add(tentacle_13);
+nose.add(tentacle_14);
+nose.add(tentacle_15);
+nose.add(tentacle_16);
+nose.add(tentacle_17);
+nose.add(tentacle_18);
+nose.add(tentacle_19);
+nose.add(tentacle_20);
+nose.add(tentacle_21);
+nose.add(tentacle_22);
 
 torso.add(front_right_paw);
 torso.add(front_left_paw);
@@ -366,15 +474,10 @@ function updateBody() {
 	
 	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
 	      
-	      if(key == "E")
+	      if(key == "U")
 	    	  p = -p;
 	
-	      var rotateZ = new THREE.Matrix4().set(1,        0,         0,        0, 
-	                                            0, Math.cos(-p),-Math.sin(-p), 0, 
-	                                            0, Math.sin(-p), Math.cos(-p), 0,
-	                                            0,        0,         0,        1);
-	
-	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotateZ);
+	      var torsoRotMatrix = new THREE.Matrix4().multiplyMatrices(torsoMatrix,rotate_Z(p));
 	            torso.setMatrix(torsoRotMatrix); 
       
 
@@ -400,17 +503,13 @@ function updateBody() {
 	      if(key == "H")
 	    	  p = -p;
 	      
-	      var rotateX = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
-					  							     	  0,        1,	    	   0,        0, 
-					  						   -Math.sin(p), 		0,   Math.cos(p),        0,
-		   												  0,        0,             0,        1);
-	      	
-		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotateX);
+      	
+		  var headRotMatrix = new THREE.Matrix4().multiplyMatrices(headMatrix,rotate_X(p));
 		  head.setMatrix(headRotMatrix); 
 
     	  
       break
-            
+            h
       //tail left/right
       case(key == "T" || key == "V" && animate):
      	 
@@ -427,12 +526,7 @@ function updateBody() {
 	      if(key == "V")
 	    	  p = -p;
 	      
-	      var rotateX = new THREE.Matrix4().set(Math.cos(p),        0,   Math.sin(p),        0, 
-	    		  										  0,        1,	    	   0,        0, 
-	    		  							   -Math.sin(p), 		0,   Math.cos(p),        0,
-	    		  										  0,        0,             0,        1);
-
-		  var tailRotMatrix = new THREE.Matrix4().multiplyMatrices(tailMatrix,rotateX);
+		  var tailRotMatrix = new THREE.Matrix4().multiplyMatrices(tailMatrix,rotate_X(p));
 		  tail.setMatrix(tailRotMatrix); 
 
     	  
@@ -451,35 +545,30 @@ function updateBody() {
 	
 	      p = (p1 - p0)*((time-time_start)/time_length) + p0; // current frame 
 	      
-	  
-	      var rotateX = new THREE.Matrix4().set(1,        0,         0,        0, 
-	    		  								 0, Math.cos(p),-Math.sin(p), 0, 
-	    		  								 0, Math.sin(p), Math.cos(p), 0,
-	    		  								 0,        0,         0,        1);
-	      
-		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,rotateX);
+
+		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_right_pawMatrix,rotate_Z(p));
 		  front_right_paw.setMatrix(pawRotMatrix); 
 		  
-		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,rotateX);
+		  var pawRotMatrix = new THREE.Matrix4().multiplyMatrices(front_left_pawMatrix,rotate_Z(p));
 		  front_left_paw.setMatrix(pawRotMatrix);
 		  
-		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_1Matrix,rotateX);
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_1Matrix,rotate_Z(p));
 		  front_right_claw_1.setMatrix(clawRotMatrix);
 		  front_left_claw_1.setMatrix(clawRotMatrix);
 		  
-		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_2Matrix,rotateX);
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_2Matrix,rotate_Z(p));
 		  front_right_claw_2.setMatrix(clawRotMatrix);
 		  front_left_claw_2.setMatrix(clawRotMatrix);
 		  
-		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_3Matrix,rotateX);
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_3Matrix,rotate_Z(p));
 		  front_right_claw_3.setMatrix(clawRotMatrix);
 		  front_left_claw_3.setMatrix(clawRotMatrix);
 		  
-		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_4Matrix,rotateX);
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_4Matrix,rotate_Z(p));
 		  front_right_claw_4.setMatrix(clawRotMatrix);
 		  front_left_claw_4.setMatrix(clawRotMatrix);
 		  
-		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_5Matrix,rotateX);
+		  var clawRotMatrix = new THREE.Matrix4().multiplyMatrices(claw_5Matrix,rotate_Z(p));
 		  front_right_claw_5.setMatrix(clawRotMatrix);
 		  front_left_claw_5.setMatrix(clawRotMatrix);
 		  
